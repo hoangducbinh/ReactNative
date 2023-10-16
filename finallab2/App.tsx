@@ -26,14 +26,14 @@ const App: React.FC = () => {
     // </NavigationContainer>
 
     // Example 2: Using TabNavigator
-    // <TabNavigator />
+     <TabNavigator />
 
     // Example 3: Using DrawerNavigator wrapped with Redux Provider
-    <Provider store={store}>
+    // <Provider store={store}>
       
-        <DrawerNavigator />
+    //     <DrawerNavigator />
      
-    </Provider>
+    // </Provider>
 
   );
 };
