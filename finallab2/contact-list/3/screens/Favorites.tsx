@@ -7,6 +7,7 @@ type Contact = {
   phone: string;
   avatar: string;
   favorite: boolean;
+  name: string;
 };
 
 type FavoritesProps = {
@@ -36,14 +37,15 @@ const Favorites: React.FC<FavoritesProps> = ({ navigation }) => {
   }, []);
 
   const renderFavoriteThumbnail = ({ item }: { item: Contact }) => {
-    const { avatar } = item;
+    const { avatar,name,phone } = item;
     return (
-      <ContactThumbnail
+      <ContactThumbnail 
         avatar={avatar}
         onPress={() => navigation.navigate('Profile', { contact: item })}
-         name={'name'} 
-         phone={'phone'} 
-         textColor={'#D8D8D8'}      />
+         name={name} 
+         phone={phone} 
+         textColor={'#D8D8D8'}   
+            />
     );
   };
 

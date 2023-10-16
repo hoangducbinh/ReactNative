@@ -23,6 +23,7 @@ const ContactListItem: React.FC<ContactListItemProps> = ({ name, avatar, phone, 
             uri: avatar,
           }}
         />
+        
         <View style={styles.details}>
           <Text style={styles.title}>{name}</Text>
           <Text style={styles.subtitle}>{phone}</Text>

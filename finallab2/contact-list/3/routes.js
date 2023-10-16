@@ -2,17 +2,22 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Favorites from '../3/screens/Favorites';
-import Profile from '../../screens/Profile';
+
 import User from './screens/User';
 import Options from './screens/Options'; // Include Options component
 import { createStackNavigator } from '@react-navigation/stack';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import colors from '../../utility/colors';
 import Contacts from '../2/screens/Contacts';
 
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import Profile from '../2/screens/Profile';
 
 
+
+// const getDrawerItemIcon = icon => ({ tintColor }) => (
+//   <MaterialIcons   name={icon} size={22} style={{ color: tintColor }} />
+// );
 
 
 const Stack = createStackNavigator();
@@ -68,12 +73,13 @@ const UserScreens = ({ navigation }) => {
             backgroundColor: colors.blue,
           },
           headerRight: () => (
-            <MaterialIcons
-              name="settings"
-              size={24}
-              style={{ color: 'white', marginRight: 10 }}
-              onPress={() => navigation.navigate('Options')}
-            />
+            <Icon
+            name="gear" 
+            size={24}
+            style={{ color: 'white', marginRight: 10 }}
+            onPress={() => navigation.navigate('Options')}
+          />
+          
           ),
         }}
       />
@@ -98,16 +104,24 @@ const TabNavigator = () => {
         <Tab.Screen
           name="ContactsScreens"
           component={ContactsScreens}
-          
+          options={{
+            tabBarIcon: "home"
+          }}
         />
         <Tab.Screen
           name="FavoritesScreens"
           component={FavoritesScreens}
+          options={{
+            tabBarIcon: "heart"
+          }}
           
         />
         <Tab.Screen
           name="UserScreens"
           component={UserScreens}
+          options={{
+            tabBarIcon: "star"
+          }}
          
         />
       </Tab.Navigator>

@@ -45,3 +45,4 @@ const fetchRandomContact = async (): Promise<Contact> => {
 };
 
 export { fetchContacts, fetchUserContact, fetchRandomContact };
+
