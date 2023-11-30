@@ -5,6 +5,8 @@ import { AuthStack } from './AuthStack';
 import { AppStack } from './AppStack';
 import { AuthenticatedUserContext } from '../providers';
 import { LoadingIndicator } from '../components';
+import TabNavigator from '../contact-list/3/routes';
+
 export const RootNavigator = () => {
     const { user, setUser } = useContext(AuthenticatedUserContext);
     const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +18,7 @@ export const RootNavigator = () => {
                 setIsLoading(false);
             }
         );
+        
         // unsubscribe auth listener on unmount
         return unsubscribeAuthStateChanged;
     }, [user]);
@@ -23,8 +26,11 @@ export const RootNavigator = () => {
         return <LoadingIndicator />;
     }
     return (
-        <NavigationContainer>
-            {user ? <AppStack /> : <AuthStack />}
-        </NavigationContainer>
+        // <NavigationContainer>
+        //     {user ? <AppStack /> : <AuthStack />}
+        // </NavigationContainer>
+       
+        user ? <TabNavigator/> : <AuthStack />
+       
     );
 };

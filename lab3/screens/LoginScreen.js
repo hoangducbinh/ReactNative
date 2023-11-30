@@ -7,6 +7,7 @@ import { View, TextInput, Logo, Button, FormErrorMessage } from '../components';
 import { Images, Colors } from '../config';
 import { useTogglePasswordVisibility } from '../hooks';
 import { loginValidationSchema } from '../utils';
+import colors from '../utility/colors';
 export const LoginScreen = ({navigation}) => {
     const [errorState, setErrorState] = useState('');
     const { passwordVisibility, handlePasswordVisibility, rightIcon } =
@@ -119,7 +120,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.white,
-        paddingHorizontal: 12
+        paddingHorizontal: 12,
+        backgroundColor : '#FFFFCC'
     },
     logoContainer: {
         alignItems: 'center'

@@ -5,9 +5,11 @@ export const HomeScreen = () => {
     const handleLogout = () => {
         auth().signOut().catch(error => console.log('Error logging out: ', error));
     };
+    
     return (
         <View style={styles.container}>
             <Button title='Sign Out' onPress={handleLogout} />
+           
         </View>
     );
 };
