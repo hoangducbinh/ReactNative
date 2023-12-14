@@ -19,7 +19,7 @@ const Stack = createStackNavigator();
 const HomeStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName='Login'
+      initialRouteName='Home'
       screenOptions={{
         headerShown: false,
       }}
@@ -34,56 +34,61 @@ const HomeStack = () => {
   );
 };
 
-const Router = () => {
-  const [controller, dispatch] = useMyContextController();
-  const { userLogin } = controller;
-
-  return (
-    <Tab.Navigator
-      initialRouteName='Login' 
-      screenOptions={{
-        headerShown: false,
-      }}
-      tabBarOptions={{
-        activeTintColor: 'blue', // Change color as needed
-        inactiveTintColor: 'gray', // Change color as needed
-      }}
-    >
-      <Tab.Screen
-       name="Home" 
-       component={HomeStack}
-       options={{
+const AuthenticatedNavigator = () => (
+  <Tab.Navigator
+    initialRouteName='Home'
+    screenOptions={{
+      headerShown: false,
+    }}
+    tabBarOptions={{
+      activeTintColor: 'blue',
+      inactiveTintColor: 'gray',
+    }}
+  >
+    <Tab.Screen
+      name="Home"
+      component={HomeStack}
+      options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="folder-home" color={color} size={size} />
         ),
-       }} />
-      <Tab.Screen 
-      name="Admin" 
-      component={AdminScreen} 
+      }}
+    />
+    <Tab.Screen
+      name="Admin"
+      component={AdminScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="account-group" color={color} size={size} />
         ),
       }}
-      />
-      <Tab.Screen 
-      name="Customer" 
+    />
+    <Tab.Screen
+      name="Customer"
       component={CustomerScreen}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="account-group" color={color} size={size} />
         ),
-      }} />
-      <Tab.Screen 
-      name="Logout" 
-      component={Setting} 
+      }}
+    />
+    <Tab.Screen
+      name="Logout"
+      component={Setting}
       options={{
         tabBarIcon: ({ color, size }) => (
           <MaterialCommunityIcons name="account" color={color} size={size} />
         ),
-      }}/>
-    </Tab.Navigator>
-  );
+      }}
+    />
+  </Tab.Navigator>
+);
+
+const Router = () => {
+  const [controller, dispatch] = useMyContextController();
+  const { userLogin } = controller;
+
+  return userLogin ? <AuthenticatedNavigator /> : <LoginScreen />;
 };
 
 export default Router;

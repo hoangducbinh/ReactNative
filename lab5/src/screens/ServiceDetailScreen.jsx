@@ -1,18 +1,10 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Alert, StyleSheet } from 'react-native';
 import { Button, IconButton } from 'react-native-paper';
-import firestore from '@react-native-firebase/firestore'; // Import Firestore from @react-native-firebase
+import firestore from '@react-native-firebase/firestore';
 
 const ServiceDetail = ({ route, navigation }) => {
   const { serviceName, price, creator, time, final, serviceId } = route.params;
-
-  const handleUpdate = () => {
-    // Navigate to the screen where you handle the service update
-    // You can replace 'EditService' with the actual screen name for updating
-    navigation.navigate('EditService', {
-      // Pass the necessary parameters if needed
-    });
-  };
 
   const handleDelete = async () => {
     try {
@@ -30,11 +22,10 @@ const ServiceDetail = ({ route, navigation }) => {
             onPress: async () => {
               // Perform deletion in Firestore
               await firestore().collection('services').doc(serviceId).delete();
-
               // Navigate back or to another screen after deletion
               navigation.goBack();
             },
-            style: 'destructive', // Red color to indicate a destructive action
+            style: 'destructive',
           },
         ],
       );
@@ -44,16 +35,12 @@ const ServiceDetail = ({ route, navigation }) => {
     }
   };
 
-
-
-
   const updateService = async () => {
     try {
       await firestore().collection('services').doc(serviceId).update({
         serviceName: serviceName,
         price: price,
       });
-
       // Navigate back to the Home screen or any other screen you prefer
       navigation.goBack();
     } catch (error) {
@@ -61,47 +48,75 @@ const ServiceDetail = ({ route, navigation }) => {
     }
   };
 
-
-
-
   return (
-    <View style={{ flex: 1 }}>
+    <View style={styles.container}>
       {/* Header with Back Button and Settings Icon */}
-      <View style={{ backgroundColor: 'violet', height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+      <View style={styles.header}>
         <IconButton
           icon="arrow-left"
-          color="#000"
+          color="#fff"
           size={24}
-          onPress={() => navigation.goBack()} // Go back to the previous screen
+          onPress={() => navigation.goBack()}
         />
-        <Text>Service Detail</Text>
+        <Text style={styles.headerText}>Service Detail</Text>
         <IconButton
           icon="cog"
-          color="#000"
+          color="#fff"
           size={24}
-          onPress={handleDelete} // Directly invoke handleDelete when settings icon is pressed
+          onPress={handleDelete}
         />
       </View>
 
       {/* Details */}
-      <View style={{ padding: 16 ,}}>
-        <Text>Service Name: {serviceName}</Text>
-        <Text>Price: {price}</Text>
-        <Text>Creator: {creator}</Text>
-        <Text>Time: {time}</Text>
-        <Text>Final: {final}</Text>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.detailText}>Service Name: {serviceName}</Text>
+        <Text style={styles.detailText}>Price: {price}</Text>
+        <Text style={styles.detailText}>Creator: {creator}</Text>
+        <Text style={styles.detailText}>Time: {time}</Text>
+        <Text style={styles.detailText}>Final: {final}</Text>
 
-        
-        <Button title="Update Service" onPress={updateService} />
-        {/* Action Buttons */}
-        {/* <TouchableOpacity onPress={handleUpdate}>
-          <Button>Update Service</Button>
-        </TouchableOpacity> */}
-        {/* Add more details or buttons as needed */}
+        {/* Action Buttons
+        <Button
+          mode="contained"
+          style={styles.updateButton}
+          onPress={updateService}
+        >
+          Update Service
+        </Button> */}
       </View>
     </View>
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+  },
+  header: {
+    backgroundColor: 'violet',
+    height: 50,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: 10,
+  },
+  headerText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 16,
+  },
+  detailsContainer: {
+    padding: 16,
+  },
+  detailText: {
+    marginBottom: 8,
+    fontSize: 16,
+  },
+  updateButton: {
+    marginTop: 16,
+    backgroundColor: 'violet',
+  },
+});
 
 export default ServiceDetail;

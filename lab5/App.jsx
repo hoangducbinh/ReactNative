@@ -36,7 +36,7 @@ const initial = async () => {
 const App = () => {
   useEffect(() => {
     // Set StatusBar color and style
-    StatusBar.setBackgroundColor("violet"); // Background color
+    StatusBar.setBackgroundColor("purple"); // Background color
     StatusBar.setBarStyle("light-content"); // Light text color
 
     // Run initial setup
