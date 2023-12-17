@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "406804308499",
+    "project_id": "onlyfans-8c346",
+    "storage_bucket": "onlyfans-8c346.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406804308499:android:4e891159f8eb81cd3455e6",
+        "android_client_info": {
+          "package_name": "com.onlyfans"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmo5YAovBuSc9XCpTYqyghNamgBS3GGX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
