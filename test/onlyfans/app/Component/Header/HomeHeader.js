@@ -18,6 +18,7 @@ const HomeHeader = () => {
           <Text style={styles.logo}>Onlyfans</Text>
         
       </TouchableOpacity>
+      
      
       <View style={styles.rightContainer}>
         <TouchableOpacity

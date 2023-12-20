@@ -33,33 +33,7 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  // const loginUser = async () => {
-  //   database()
-  //     .ref('users/')
-  //     .orderByChild('emailId')
-  //     .equalTo(email)
-  //     .once('value')
-  //     .then(async snapshot => {
-  //       if (snapshot.val() == null) {
-  //         SimpleToast.show('Invalid Email Id!');
-  //         return false;
-  //       }
-  //       let userData = Object.values(snapshot.val())[0];
-  //       if (userData?.password != pass) {
-  //         SimpleToast.show('Invalid Password!');
-  //         return false;
-  //       }
-
-  //       console.log('User data: ', userData);
-  //       dispatch(setUser(userData));
-  //       await Auth.setAccount(userData);
-  //       SimpleToast.show('Login Successfully!');
-  //     })
-  //     .catch(e => {
-  //       SimpleToast.show(e.message);
-  //     });
-  // };
-  
+ 
 
   const loginUser = async () => {
     try {
