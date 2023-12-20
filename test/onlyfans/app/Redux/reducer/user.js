@@ -9,12 +9,13 @@ export const userSlice = createSlice({
   reducers: {
     setUser(state,action) {
       const user = action.payload;
-      //return {...state, userData:user,login:true}
-      return {...state, userData:user,login:false}
+      return {...state, userData:user,login:true}
+      //return {...state, userData:user,login:false}
     },
     removeUser(state,action) {
        return {...state, userData:{},login:false}
-    }
+    },
+   
   }
 })
 

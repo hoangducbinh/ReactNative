@@ -32,32 +32,7 @@ function Register() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
-  // const registerUser = async () => {
-  //   if (name == '' || email == '' || pass == '' || about == '') {
-  //     SimpleToast.show('Fill in all the fields!');
-  //     return false;
-  //   }
-  //   let data = {
-  //     id: uuid.v4(),
-  //     name: name,
-  //     emailId: email,
-  //     password: pass,
-  //     about: about,
-  //     img: 'https://www.pngall.com/wp-content/uploads/5/User-Profile-PNG-High-Quality-Image.png',
-  //   };
-
-  //   database()
-  //     .ref('/users/' + data.id)
-  //     .set(data)
-  //     .then(() => {
-  //       SimpleToast.show('Register Successfully!');
-  //       setname('');
-  //       setemail('');
-  //       setpass('');
-  //       setabout('');
-  //       Navigation.navigate('Login');
-  //     });
-  // };
+  
 
 
   const togglePasswordVisibility = () => {
@@ -90,7 +65,7 @@ function Register() {
           emailId: email,
           password: pass,
           about: about,
-          img: 'https://s.net.vn/UGlD',
+          img: 'https://s.net.vn/quIk',
         };
 
         // Update user data in Realtime Database
@@ -133,9 +108,10 @@ function Register() {
         <Image
           style={{ width: 70, height: 70, borderRadius: 35 }}
           source={{
-            uri: 'https://s.net.vn/UGlD',
+            uri: 'https://s.net.vn/quu5',
           }}
         />
+        
         <Text style={{ color: '#fff', fontFamily: FONTS.Bold, fontSize: 25 }}>
           OnlyFans
         </Text>

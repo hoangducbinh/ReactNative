@@ -44,26 +44,27 @@ const Home = (props) => {
 
 
 
-  const deleteChatList = (item) => {
-    Alert.alert(
-      'Confirm Deletion',
-      `Are you sure you want to delete the chat with ${item.name}?`,
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
+const deleteChatList = (item) => {
+  Alert.alert(
+    'Confirm Deletion',
+    `Are you sure you want to delete the chat with ${item.name}?`,
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Delete',
+        onPress: () => {
+          // Update the chatList state by filtering out the deleted item
+          setChatList((prevChatList) => prevChatList.filter(chatItem => chatItem.id !== item.id));
+          setSearch(''); // Clear the search state
         },
-        {
-          text: 'Delete',
-          onPress: () => {
-            // Implement logic to delete the chat list item from the database
-            database().ref(`/chatlist/${userData?.id}/${item.id}`).remove();
-            setSearch(''); // Clear the search state
-          },
-        },
-      ]
-    );
-  };
+      },
+    ]
+  );
+};
+
   
   
 

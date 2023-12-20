@@ -158,12 +158,12 @@ const SingleChat = (props) => {
         sendTime: moment().format(''),
         msgType: 'text',  // You can adjust the msgType based on your requirements
       };
-
+      setMsg('');
       await updateMessagesToFirebase(msgData);
 
       // Stop recording
     stopRecognizing();
-
+    
     // Close the modal only if it is currently open
     
 

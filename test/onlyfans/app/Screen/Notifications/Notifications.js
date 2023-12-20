@@ -15,41 +15,7 @@ import Navigation from '../../Service/Navigation';
 import database from '@react-native-firebase/database';
 
 const Notifications = () => {
-  const { userData } = useSelector((state) => state.User);
-
-  const [notifications, setNotifications] = useState([]);
-
-  useEffect(() => {
-    getNotifications();
-  }, []);
-
-  const getNotifications = async () => {
-    // Fetch notifications from the database or any other source
-    // Update the 'notifications' state with the retrieved data
-    const notificationsData = await database()
-      .ref('/notifications/' + userData?.id)
-      .once('value')
-      .then((snapshot) => snapshot.val());
-
-    if (notificationsData) {
-      setNotifications(Object.values(notificationsData));
-    }
-  };
-
-  const renderItem = ({ item }) => (
-    <ListItem containerStyle={styles.listItemContainer}>
-      <Avatar source={{ uri: item.senderImg }} rounded size="medium" />
-      <ListItem.Content>
-        <ListItem.Title style={styles.title}>
-          {item.senderName} sent you a notification
-        </ListItem.Title>
-        <ListItem.Subtitle style={styles.subtitle}>
-          {item.message}
-        </ListItem.Subtitle>
-      </ListItem.Content>
-    </ListItem>
-  );
-
+  
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <StatusBar barStyle="dark-content" backgroundColor={COLORS.white} />
@@ -64,12 +30,7 @@ const Notifications = () => {
        <Text style={styles.header}>Notifications</Text>
       </View>
 
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        keyExtractor={(item, index) => index.toString()}
-        data={notifications}
-        renderItem={renderItem}
-      />
+      
     </SafeAreaView>
   );
 };

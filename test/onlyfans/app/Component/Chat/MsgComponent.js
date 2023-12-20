@@ -35,7 +35,7 @@ const MsgComponent = ({ sender, item }) => {
     <View style={[styles.container, sender ? styles.sentContainer : styles.receivedContainer]}>
       {sender && (
        <Text style={styles.sentTime}>
-       {formatDateTime(new Date(item.sendTime))}
+       {formatTime(new Date(item.sendTime))}
      </Text>
       )}
       <View style={styles.messageContainer}>
@@ -59,7 +59,7 @@ const MsgComponent = ({ sender, item }) => {
       </View>
       {!sender && (
         <Text style={styles.receivedTime}>
-          {item.sendTime} {/* Display the time for received messages */}
+          {formatTime(new Date(item.sendTime))}
         </Text>
       )}
     </View>
@@ -82,19 +82,20 @@ const styles = StyleSheet.create({
   sentTime: {
     alignSelf: 'flex-end',
     color: COLORS.gray,
-    fontSize: 12,
+    fontSize: 10,
     marginRight: 5,
     marginBottom: 5,
   },
   receivedTime: {
     alignSelf: 'flex-start',
     color: COLORS.gray,
-    fontSize: 12,
+    fontSize: 10,
     marginLeft: 5,
     marginBottom: 5,
   },
+  
   messageContainer: {
-    maxWidth: '80%',
+    maxWidth: '70%',
   },
   sentText: {
     backgroundColor: COLORS.blue,
@@ -108,12 +109,14 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     color: COLORS.black,
   },
+  
   image: {
-    width: 200, // Set your preferred width
-    height: 200, // Set your preferred height
-    borderRadius: 15, // Add a border radius to remove sharp corners
-    resizeMode: 'cover', // Adjust resizeMode as needed
-    alignSelf: 'flex-end', // Align images of sent messages to the right
+    marginVertical: 5, // Add margin to the top and bottom
+    width: 200,
+    height: 200,
+    borderRadius: 15,
+    resizeMode: 'cover',
+    alignSelf: 'flex-end',
   },
 });
 

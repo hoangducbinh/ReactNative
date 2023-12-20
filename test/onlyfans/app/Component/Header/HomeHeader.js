@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Avatar, Icon } from 'react-native-elements';
+import { Avatar, Icon, Image } from 'react-native-elements';
 import { useSelector } from 'react-redux';
 import { COLORS } from '../Constant/Color';
 import { FONTS } from '../Constant/Font';
@@ -14,8 +14,11 @@ const HomeHeader = () => {
       <TouchableOpacity
         style={styles.logoContainer}
         >
-        <Text style={styles.logo}>Onlyfans</Text>
+          <Image source={require('../../Assets/OnlyFans.png')} style={{ width: 45, height: 45 }} />
+          <Text style={styles.logo}>Onlyfans</Text>
+        
       </TouchableOpacity>
+     
       <View style={styles.rightContainer}>
         <TouchableOpacity
           onPress={() => Navigation.navigate('Notifications')}
@@ -26,7 +29,6 @@ const HomeHeader = () => {
             color={COLORS.blue}
             size={28}
           />
-
           <View style={styles.notificationBadge}>
             <Text style={styles.notificationText}>3</Text>
           </View>
@@ -56,6 +58,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.themeLight,
     paddingVertical: 8,
     paddingHorizontal: 15,
+    flexDirection: 'row',
   },
   logo: {
     fontFamily: FONTS.Bold,

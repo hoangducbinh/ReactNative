@@ -33,31 +33,56 @@ function Login() {
     setShowPassword(!showPassword);
   };
 
-  const loginUser = async () => {
-    database()
-      .ref('users/')
-      .orderByChild('emailId')
-      .equalTo(email)
-      .once('value')
-      .then(async snapshot => {
-        if (snapshot.val() == null) {
-          SimpleToast.show('Invalid Email Id!');
-          return false;
-        }
-        let userData = Object.values(snapshot.val())[0];
-        if (userData?.password != pass) {
-          SimpleToast.show('Invalid Password!');
-          return false;
-        }
+  // const loginUser = async () => {
+  //   database()
+  //     .ref('users/')
+  //     .orderByChild('emailId')
+  //     .equalTo(email)
+  //     .once('value')
+  //     .then(async snapshot => {
+  //       if (snapshot.val() == null) {
+  //         SimpleToast.show('Invalid Email Id!');
+  //         return false;
+  //       }
+  //       let userData = Object.values(snapshot.val())[0];
+  //       if (userData?.password != pass) {
+  //         SimpleToast.show('Invalid Password!');
+  //         return false;
+  //       }
 
-        console.log('User data: ', userData);
-        dispatch(setUser(userData));
-        await Auth.setAccount(userData);
-        SimpleToast.show('Login Successfully!');
-      })
-      .catch(e => {
-        SimpleToast.show(e.message);
-      });
+  //       console.log('User data: ', userData);
+  //       dispatch(setUser(userData));
+  //       await Auth.setAccount(userData);
+  //       SimpleToast.show('Login Successfully!');
+  //     })
+  //     .catch(e => {
+  //       SimpleToast.show(e.message);
+  //     });
+  // };
+  
+
+  const loginUser = async () => {
+    try {
+      const userCredential = await auth().signInWithEmailAndPassword(email, pass);
+      const user = userCredential.user;
+  
+      // Sử dụng uid thay vì email để truy cập dữ liệu người dùng
+      const userSnapshot = await database().ref(`users/${user.uid}`).once('value');
+      const userData = userSnapshot.val();
+  
+      if (!userData) {
+        SimpleToast.show('Invalid User Data!');
+        return false;
+      }
+  
+      // Thực hiện các thao tác với userData theo ý bạn
+      dispatch(setUser(userData));
+      await Auth.setAccount(userData);
+  
+      SimpleToast.show('Login Successfully!');
+    } catch (error) {
+      SimpleToast.show(error.message);
+    }
   };
 
   return (
@@ -71,7 +96,7 @@ function Login() {
         <Image
           style={{ width: 70, height: 70, borderRadius: 35 }}
           source={{
-            uri: 'https://s.net.vn/UGlD',
+            uri: 'https://s.net.vn/quu5',
           }}
         />
 

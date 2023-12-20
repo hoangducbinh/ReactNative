@@ -4,17 +4,22 @@ import { Avatar, Icon, Header, ListItem } from 'react-native-elements';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useDispatch, useSelector } from 'react-redux';
 import { COLORS } from '../../Component/Constant/Color';
-import { removeUser, setUser } from '../../Redux/reducer/user';
+import {  removeUser, setUser } from '../../Redux/reducer/user';
 import database from '@react-native-firebase/database';
 import { firebase } from '@react-native-firebase/app';
 import Navigation from '../../Service/Navigation';
+import Auth from '../../Service/Auth'; 
+import SimpleToast from 'react-native-simple-toast';
+import AuthStack from '../../Navigation/AuthStack';
 
 const UserProfile = () => {
   const dispatch = useDispatch();
   const { userData, login } = useSelector((state) => state.User);
   const [isImageLoading, setImageLoading] = useState(false);
-  const [isModalVisible, setModalVisible] = useState(false);
+  const [isNameModalVisible, setNameModalVisible] = useState(false);
+  const [isAboutModalVisible, setAboutModalVisible] = useState(false);
   const [newName, setNewName] = useState(userData?.name);
+  const [newAbout, setNewAbout] = useState(userData?.about);
 
   const handleImageChange = async () => {
     try {
@@ -23,30 +28,30 @@ const UserProfile = () => {
         height: 400,
         cropping: true,
       });
-  
+
       // Check if the user cancelled the image selection
       if (!image || image.didCancel) {
         console.log('Image selection cancelled by the user.');
         return;
       }
-  
+
       setImageLoading(true);
-  
+
       const response = await fetch(image.path);
       const blob = await response.blob();
       const storageRef = firebase.storage().ref().child(`avatars/${userData.id}`);
       await storageRef.put(blob);
-  
+
       const downloadURL = await storageRef.getDownloadURL();
-  
+
       // Update the user's avatar URL in the Realtime Database
       await database()
         .ref(`users/${userData.id}/img`)
         .set(downloadURL);
-  
+
       const updatedUserData = { ...userData, img: downloadURL };
       dispatch(setUser(updatedUserData));
-  
+
       setImageLoading(false);
     } catch (error) {
       console.log('ImagePicker Error: ', error);
@@ -73,10 +78,24 @@ const UserProfile = () => {
         <View style={styles.userInfo}>
           <Text style={styles.username}>{userData?.name}</Text>
           <Text style={styles.email}>{userData?.emailId}</Text>
+          <Text style={styles.about}>{userData?.about}</Text>
         </View>
       </View>
     );
   };
+
+
+  const handleChangeAbout = async () => {
+    await database().ref(`users/${userData.id}/about`).set(newAbout);
+  
+    const updatedUserData = { ...userData, about: newAbout };
+    dispatch(setUser(updatedUserData));
+  
+    // Close the modal
+    setAboutModalVisible(false);
+  };
+  
+
 
   const navigateToChangePassword = () => {
     Navigation.navigate('ChangePassword');
@@ -90,31 +109,49 @@ const UserProfile = () => {
     dispatch(setUser(updatedUserData));
 
     // Close the modal
-    setModalVisible(false);
+    setNameModalVisible(false);
   };
 
-  const openNameModal = () => {
-    setModalVisible(true);
+  const openNameModalName = () => {
+    setNameModalVisible(true);
   };
 
-  const closeNameModal = () => {
-    setModalVisible(false);
+  const closeNameModalName = () => {
+    setNameModalVisible(false);
   };
-  // const handleLogout = async () => {
-  //   try {
-  //     // Call the logout function
-  //     await Auth.logout();
+
+  const openNameModalAbout = () => {
+    setAboutModalVisible(true);
+  };
+
+  const closeNameModalAbout = () => {
+    setAboutModalVisible(false);
+  };
+
+
+
+  const handleLogout = async () => {
+    try {
+      // Call the logout function from the Storage utility
+      await Auth.logout();
+
+      // Reset user data in Redux store
+      dispatch(setUser(null));
+      dispatch(removeUser());
+      
+      // Show a toast message indicating successful logout
+      SimpleToast.show('Logout Successful!');
+    } catch (error) {
+      // Handle any errors that might occur during the logout process
+      console.error('Error during logout:', error);
+
+      // Show a toast message indicating the logout error
+      SimpleToast.show('Logout Failed');
+    }
+  };
   
-  //     // Additional steps you may want to take after logout
-  //     // For example, navigate to the login screen or clear local state
-  //   } catch (error) {
-  //     console.error('Error during logout:', error);
-  //     // Handle the error, show a message, etc.
-  //   }
-  // };
-  const handleLogout = () => {
-    dispatch(removeUser());
-  };
+
+
   return (
     <View style={styles.container}>
       <Header
@@ -127,26 +164,33 @@ const UserProfile = () => {
           <Text style={styles.functionalityTitle}>Đổi mật khẩu</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={openNameModal}>
+      <TouchableOpacity onPress={openNameModalName}>
         <View style={styles.functionalityItem}>
           <Icon name="pencil" type="ionicon" size={24} color={COLORS.black} style={styles.functionalityIcon} />
           <Text style={styles.functionalityTitle}>Đổi tên</Text>
         </View>
       </TouchableOpacity>
+      <TouchableOpacity onPress={openNameModalAbout} >
+        <View style={styles.functionalityItem} >
+          <Icon name="card" type="ionicon" size={24} color={COLORS.black} style={styles.functionalityIcon} />
+          <Text style={styles.functionalityTitle}>Đổi thông tin giới thiệu</Text>
+        </View>
+      </TouchableOpacity>
       <TouchableOpacity onPress={handleLogout} >
         <View style={styles.functionalityItem} >
           <Icon name="arrow-redo" type="ionicon" size={24} color={COLORS.black} style={styles.functionalityIcon} />
-          <Text style={styles.functionalityTitle}>Đổi tài khoản</Text>
+          <Text style={styles.functionalityTitle} >Đổi tài khoản</Text>
+          
         </View>
       </TouchableOpacity>
 
-       {/* Name change modal */}
-       <Modal
+      {/* Name change modal */}
+      <Modal
         animationType="slide"
         transparent={true}
-        visible={isModalVisible}
-        onRequestClose={closeNameModal}
-        
+        visible={isNameModalVisible}
+        onRequestClose={closeNameModalName}
+
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
@@ -158,7 +202,7 @@ const UserProfile = () => {
               placeholder="Nhập tên mới"
             />
             <View style={styles.modalButtons}>
-              <TouchableOpacity onPress={closeNameModal}>
+              <TouchableOpacity onPress={closeNameModalName}>
                 <Text style={styles.modalButton}>Hủy</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleSaveName}>
@@ -168,6 +212,35 @@ const UserProfile = () => {
           </View>
         </View>
       </Modal>
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={isAboutModalVisible}
+        onRequestClose={closeNameModalAbout}
+
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Thay đổi tên</Text>
+            <TextInput
+              style={styles.input}
+              value={newAbout}
+              onChangeText={setNewAbout}
+              placeholder="Nhập giới thiệu về bạn"
+            />
+            <View style={styles.modalButtons}>
+              <TouchableOpacity onPress={closeNameModalAbout}>
+                <Text style={styles.modalButton}>Hủy</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleChangeAbout}>
+                <Text style={styles.modalButton}>Lưu</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
     </View>
   );
 };
@@ -183,12 +256,12 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     justifyContent: 'space-around',
     elevation: 2,
-    
+
   },
   headerCenter: {
     alignItems: 'center',
     marginTop: 20,
-    
+
   },
   avatarPlaceholder: {
     backgroundColor: COLORS.lightgray,
@@ -205,6 +278,11 @@ const styles = StyleSheet.create({
   email: {
     fontFamily: 'FONTS.Regular',
     fontSize: 14,
+    color: COLORS.gray,
+  },
+  about: {
+    fontFamily: 'FONTS.Regular',
+    fontSize: 16,
     color: COLORS.gray,
   },
 
@@ -259,7 +337,7 @@ const styles = StyleSheet.create({
     color: COLORS.blue,
     marginLeft: 20,
   },
-  
+
 });
 
 export default UserProfile;

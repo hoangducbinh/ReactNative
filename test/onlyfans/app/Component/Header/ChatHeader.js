@@ -1,17 +1,36 @@
-//import liraries
-import React, {useState} from 'react';
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
-import {Icon} from 'react-native-elements';
-import {Avatar} from 'react-native-elements/dist/avatar/Avatar';
+import React, { useState, useEffect } from 'react';
+import { StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Icon } from 'react-native-elements';
+import { Avatar } from 'react-native-elements/dist/avatar/Avatar';
+import moment from 'moment'; // Import thư viện moment
 import Navigation from '../../Service/Navigation';
-import {COLORS} from '../Constant/Color';
-import {FONTS} from '../Constant/Font';
+import { COLORS } from '../Constant/Color';
+import { FONTS } from '../Constant/Font';
 
-// create a component
-const ChatHeader = props => {
-  const {data} = props;
+const ChatHeader = (props) => {
+  const { data } = props;
+  const [lastSeen, setLastSeen] = useState('');
 
-  const [lastSeen, setlastSeen] = useState('');
+  useEffect(() => {
+    // Tính thời gian last seen ở đây
+    const calculateLastSeen = () => {
+      if (data.isOnline) {
+        // Nếu người dùng đang online, hiển thị "Present"
+        setLastSeen('Present');
+      } else {
+        // Nếu không, thực hiện xử lý thời gian last seen
+        const userLastSeen = data.lastSeen || Date.now();
+        const formattedLastSeen = moment(userLastSeen).fromNow();
+        setLastSeen(`Last seen ${formattedLastSeen}`);
+      }
+    };
+
+    calculateLastSeen();
+  }, [data.isOnline, data.lastSeen]);
+
+  const handleAlertCirclePress = () => {
+    Navigation.navigate('InfoUser', { userData: data });
+  };
 
   return (
     <View style={styles.container}>
@@ -31,9 +50,9 @@ const ChatHeader = props => {
         color={COLORS.blue}
         onPress={() => Navigation.back()}
       />
-      <Avatar source={{uri: data.img}} rounded size="small" />
+      <Avatar source={{ uri: data.img }} rounded size="small" />
 
-      <View style={{flex: 1, marginLeft: 10}}>
+      <View style={{ flex: 1, marginLeft: 10 }}>
         <Text
           numberOfLines={1}
           style={{
@@ -45,42 +64,48 @@ const ChatHeader = props => {
           {data.name}
         </Text>
 
-        {/* <Text
-                    style={{ color: COLORS.primaryBackground, fontSize: 10,fontFamily: FONTS.Regular }}
-                >
-                    {lastSeen}
-                </Text> */}
+        <Text
+          style={{
+            color: COLORS.blue,
+            fontSize: 10,
+            fontFamily: FONTS.Regular,
+          }}>
+          {lastSeen}
+        </Text>
       </View>
 
       <Icon
-                style={{
-                    marginHorizontal: 10,
-                }}
-                color={COLORS.blue}
-                name="call"
-                type="ionicon"
-            />
-            <Icon
-                style={{
-                    marginHorizontal: 10,
-                }}
-                color={COLORS.blue}
-                name="videocam"
-                type="ionicon"
-            />
-             <Icon
-                style={{
-                    marginHorizontal: 10,
-                }}
-                color={COLORS.blue}
-                name="alert-circle"
-                type="ionicon"
-            />
+        style={{
+          marginHorizontal: 10,
+        }}
+        color={COLORS.blue}
+        name="call"
+        type="ionicon"
+      />
+      <Icon
+        style={{
+          marginHorizontal: 10,
+        }}
+        color={COLORS.blue}
+        name="videocam"
+        type="ionicon"
+      />
+      <TouchableOpacity onPress={handleAlertCirclePress}>
+        <Icon
+          style={{
+            marginHorizontal: 10,
+          }}
+          color={COLORS.blue}
+          name="alert-circle"
+          type="ionicon"
+        />
+      </TouchableOpacity>
     </View>
   );
 };
 
-// define your styles
+
+
 const styles = StyleSheet.create({
   container: {
     height: 70,
@@ -91,5 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-//make this component available to the app
 export default ChatHeader;

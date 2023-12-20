@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet,Alert } from 'react-native';
 import { Input, Button, Icon } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import { COLORS } from '../../Component/Constant/Color';
 import Navigation from '../../Service/Navigation';
+import { useDispatch, useSelector } from 'react-redux';
+
 
 const ChangePassword = () => {
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const dispatch = useDispatch();
 
     const handleChangePassword = async () => {
         try {
@@ -17,40 +20,66 @@ const ChangePassword = () => {
                 setErrorMessage('Please fill in all fields');
                 return;
             }
-
+    
             if (newPassword !== confirmPassword) {
                 setErrorMessage('New password and confirm password do not match');
                 return;
             }
-
+    
             const credentials = auth.EmailAuthProvider.credential(auth().currentUser.email, password);
-            await auth().currentUser.reauthenticateWithCredential(credentials);
-            await auth().currentUser.updatePassword(newPassword);
-
-            setErrorMessage('');
-            setPassword('');
-            setNewPassword('');
-            setConfirmPassword('');
-
-            // Display success message
-            Alert.alert(
-                'Password Changed',
-                'Your password has been changed successfully.',
-                [
-                    {
-                        text: 'OK',
-                        onPress: () => {
-                            // Navigate back to UserProfile screen
-                            Navigation.navigate('UserProfile');
+    
+            try {
+                // Reauthenticate user with the provided credentials
+                await auth().currentUser.reauthenticateWithCredential(credentials);
+    
+                // If reauthentication is successful, update the password
+                await auth().currentUser.updatePassword(newPassword);
+    
+                setErrorMessage('');
+                setPassword('');
+                setNewPassword('');
+                setConfirmPassword('');
+    
+                // Display success message
+                Alert.alert(
+                    'Password Changed',
+                    'Your password has been changed successfully.',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => {
+                                // Navigate back to UserProfile screen
+                                Navigation.navigate('UserProfile');
+                                dispatch(removeUser());
+                            },
                         },
-                    },
-                ]
-            );
+                    ]
+                );
+            } catch (reauthError) {
+                console.error('Reauthentication error:', reauthError.message);
+    
+                if (reauthError.code === 'auth/too-many-requests') {
+                    // Display alert for too many requests
+                    Alert.alert(
+                        'Too Many Requests',
+                        'Access to this account has been temporarily disabled due to many failed login attempts. Please try again later or reset your password.',
+                        [
+                            {
+                                text: 'OK',
+                            },
+                        ]
+                    );
+                } else {
+                    // Display alert for other reauthentication errors
+                    setErrorMessage('Incorrect current password. Please try again.');
+                }
+            }
         } catch (error) {
             console.error('Password change error:', error.message);
             setErrorMessage('Failed to change password. Please check your current password.');
         }
     };
+    
 
     return (
 

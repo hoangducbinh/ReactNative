@@ -8,6 +8,9 @@ import UserProfile from '../Screen/User/UserProfile';
 import SpeechToText from '../Component/Chat/SpeechToText';
 import Notifications from '../Screen/Notifications/Notifications';
 import ChangePassword from '../Screen/User/ChangePassword';
+import InfoUser from '../Screen/User/InfoUser';
+import Login from '../Screen/Auth/Login';
+import Register from '../Screen/Auth/Register';
 const Stack = createStackNavigator();
 
 export default function AuthStack() {
@@ -30,6 +33,10 @@ export default function AuthStack() {
       <Stack.Screen name="SpeechToText" component={SpeechToText} />
       <Stack.Screen name="Notifications" component={Notifications }/>
       <Stack.Screen name="ChangePassword" component={ChangePassword}/>
+      <Stack.Screen name="InfoUser" component={InfoUser}/>
+      <Stack.Screen name="Login" component={Login}/>
+      <Stack.Screen name="Register" component={Register}/> 
+      
       
     </Stack.Navigator>
   );
