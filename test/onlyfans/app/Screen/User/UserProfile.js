@@ -219,11 +219,10 @@ const UserProfile = () => {
         transparent={true}
         visible={isAboutModalVisible}
         onRequestClose={closeNameModalAbout}
-
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Thay đổi tên</Text>
+            <Text style={styles.modalTitle}>Nhập giới thiệu về bạn</Text>
             <TextInput
               style={styles.input}
               value={newAbout}

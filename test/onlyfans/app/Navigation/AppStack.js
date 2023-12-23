@@ -7,10 +7,11 @@ import SingleChat from '../Screen/Home/SingleChat';
 import UserProfile from '../Screen/User/UserProfile';
 import SpeechToText from '../Component/Chat/SpeechToText';
 import Notifications from '../Screen/Notifications/Notifications';
-import ChangePassword from '../Screen/User/ChangePassword';
+
 import InfoUser from '../Screen/User/InfoUser';
 import Login from '../Screen/Auth/Login';
 import Register from '../Screen/Auth/Register';
+import ChangePassword from '../Screen/Auth/ChangePassword';
 const Stack = createStackNavigator();
 
 export default function AuthStack() {

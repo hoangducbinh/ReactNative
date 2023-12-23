@@ -20,6 +20,8 @@ import { setUser } from '../../Redux/reducer/user';
 import Auth from '../../Service/Auth';
 import { Card, Icon } from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
+import { HelperText } from 'react-native-paper';
+
 
 const { width, height } = Dimensions.get('window');
 
@@ -29,34 +31,52 @@ function Login() {
   const [email, setemail] = useState('');
   const [pass, setpass] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [incorrectPassword, setIncorrectPassword] = useState(false);
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+
+
+  };
+  const isValidEmail = (email) => {
+    // Replace this with your own email validation logic using a regular expression
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
- 
+
 
   const loginUser = async () => {
     try {
       const userCredential = await auth().signInWithEmailAndPassword(email, pass);
       const user = userCredential.user;
-  
+
       // Sử dụng uid thay vì email để truy cập dữ liệu người dùng
       const userSnapshot = await database().ref(`users/${user.uid}`).once('value');
       const userData = userSnapshot.val();
-  
+
+      if (!userCredential) {
+        setIncorrectPassword(true);
+        SimpleToast.show('Incorrect email or password');
+        return false;
+      }
       if (!userData) {
         SimpleToast.show('Invalid User Data!');
         return false;
       }
-  
+
       // Thực hiện các thao tác với userData theo ý bạn
       dispatch(setUser(userData));
       await Auth.setAccount(userData);
-  
+
       SimpleToast.show('Login Successfully!');
     } catch (error) {
+      setIncorrectPassword(true);
       SimpleToast.show(error.message);
     }
+
+    
+
+
   };
 
   return (
@@ -104,7 +124,7 @@ function Login() {
               </View>
               <TextInput
                 style={styles.inputs}
-                placeholder="Enter Email Id"
+                placeholder="Enter"
                 keyboardType="email-address"
                 underlineColorAndroid="transparent"
                 onChangeText={value => {
@@ -114,6 +134,9 @@ function Login() {
                 placeholderTextColor={COLORS.liteBlack}
               />
             </View>
+
+            
+
 
             <View style={styles.inputContainer}>
               <View style={styles.inputIconView}>
@@ -148,7 +171,9 @@ function Login() {
               </TouchableOpacity>
 
             </View>
+           
 
+           
             <TouchableOpacity style={styles.btn} onPress={loginUser}>
               <Text style={styles.btnText}>Login Now</Text>
             </TouchableOpacity>
@@ -161,7 +186,21 @@ function Login() {
                 <Text style={styles.register}>Register Now</Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.contactView}>
+              <TouchableOpacity
+                style={{ marginLeft: 4 }}
+                onPress={() => Navigation.navigate('ForgotPassword')}>
+                <Text style={styles.register}>ForgotPassword</Text>
+              </TouchableOpacity>
+            </View>
           </Card>
+          <HelperText type="error" visible={incorrectPassword}>
+        Sai tài khoản hoặc mật khẩu
+      </HelperText>
+      <HelperText type="error" visible={email && !isValidEmail(email)}>
+              Email không đúng định dạng
+            </HelperText>
+                
         </KeyboardAwareScrollView>
       </View>
     </View>
@@ -249,9 +288,9 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.SemiBold,
     marginTop: 12,
     textAlign: 'center',
-    color: COLORS.textInput,
-    textDecorationLine: 'underline',
+    color: COLORS.liteblue,
   },
+  
   contactView: {
     flexDirection: 'row',
     justifyContent: 'center',

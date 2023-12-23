@@ -215,6 +215,11 @@ const SingleChat = (props) => {
         cropping: false,
       });
 
+      if (!image) {
+        console.log('Image selection canceled by the user');
+        return;
+      }
+
       const imgName = image.path.substring(image.path.lastIndexOf('/') + 1);
       const ext = imgName.split('.').pop();
       const name = imgName.split('.')[0];
@@ -235,7 +240,13 @@ const SingleChat = (props) => {
 
       updateMessagesToFirebase(msgData);
     } catch (error) {
-      console.error('Error uploading image: ', error);
+      if (error.message === 'User cancelled image selection') {
+        console.log('Image selection canceled by the user');
+      } else {
+        // Log other errors
+        console.error('Error uploading image: ', error);
+      }
+     
     }
   };
 

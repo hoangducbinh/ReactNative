@@ -222,10 +222,6 @@ function Register() {
                 />
               </TouchableOpacity>
             </View>
-
-
-
-
             <View style={styles.inputContainer}>
               <View style={styles.inputIconView}>
                 <Icon
@@ -357,6 +353,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 2,
   },
+
   btn: {
     backgroundColor: COLORS.liteblue,
     width: '100%',
